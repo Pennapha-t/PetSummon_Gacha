@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/LogIn.unity
+    guid: 74b6e27ad93b65443ac16aea1ba7cb35
+  - enabled: 1
+    path: Assets/Scenes/Main.unity
+    guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/NormalGacha.unity
+    guid: 094103d03aaef664592f87a25475884f
+  - enabled: 1
+    path: Assets/Scenes/Shop.unity
+    guid: 44c793fb8f635dd4fb622e315c8e948f
+  - enabled: 1
+    path: Assets/Scenes/Inventory.unity
+    guid: d26c0071ecc815d41ad9253d18cccbe5
+  - enabled: 1
+    path: Assets/Scenes/History.unity
+    guid: a82b862d94fc23a499b536543a192293
+  - enabled: 1
+    path: Assets/Scenes/Gameplay.unity
+    guid: 479af5730f617cd4fa65d9ccd9232c1f
+  - enabled: 1
+    path: Assets/Scenes/Adventure.unity
+    guid: 525fb0c815b402d47ba55b895ca037ff
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  m_UseUCBPForAssetBundles: 0

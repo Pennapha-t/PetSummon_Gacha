@@ -1,0 +1,1 @@
+UPDATE Player SET gold_coin = 12000 WHERE player_id = 1;
