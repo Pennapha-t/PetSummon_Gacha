@@ -1,0 +1,22 @@
+[
+        {
+            "rarity": "C"
+            ,"name" : "Iron Sword"
+            ,"item_id": 10010
+        }
+       ,{
+            "rarity": "R"
+            ,"name" : "Red Iron Sword"
+            ,"item_id": 10011
+        }
+       ,{
+            "rarity": "SR"
+            ,"name" : "Thunder Iron Sword"
+            ,"item_id": 10012
+        }
+       ,{
+            "rarity": "SSR"
+            ,"name" : "Aurion Holy Sword"
+            ,"item_id": 10013
+        }
+]

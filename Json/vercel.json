@@ -1,0 +1,15 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "api/gacha.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+      "src": "/api/gacha",
+      "dest": "api/gacha.js"
+    }
+  ]
+}

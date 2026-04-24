@@ -1,0 +1,6 @@
+[
+  { "weight": 80 , "rarity" : "C",   "name": "Common Item (C)"      },
+  { "weight": 60 , "rarity" : "R",   "name": "Rare Item (R)"        },      
+  { "weight": 18 , "rarity" : "SR",  "name": "Super Rare Item (SR)" },  
+  { "weight": 1  , "rarity" : "SSR", "name": "Legendary Item (SSR)" }
+]
