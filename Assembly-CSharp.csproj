@@ -47,20 +47,25 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.2.10f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Controllers\ItemDrop.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerCurrencyUI.cs" />
     <Compile Include="Assets\Scripts\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\ModelClass\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerHealth.cs" />
     <Compile Include="Assets\Scripts\PlayerMana.cs" />
+    <Compile Include="Assets\Scripts\Models\WeaponData.cs" />
+    <Compile Include="Assets\Scripts\Controllers\WeaponDataFetcherControl.cs" />
     <Compile Include="Assets\Scripts\SQliteAdapter.cs" />
     <Compile Include="Assets\Scripts\UI\UIButton.cs" />
     <Compile Include="Assets\Scripts\AttackUi\ParryButton.cs" />
     <Compile Include="Assets\Scripts\UI\Shop.cs" />
     <Compile Include="Assets\Scripts\UI\Gameplay.cs" />
     <Compile Include="Assets\Scripts\ScoreItem.cs" />
+    <Compile Include="Assets\Scripts\Models\Monster.cs" />
     <Compile Include="Assets\Scripts\Cat\CatSelector.cs" />
     <Compile Include="Assets\Scripts\UI\UIHistory.cs" />
     <Compile Include="Assets\Scripts\UI\UIBackMain.cs" />
+    <Compile Include="Assets\Scripts\Controllers\CoinDrop.cs" />
     <Compile Include="Assets\Scripts\UI\ExitGame.cs" />
     <Compile Include="Assets\Scripts\Cat\PlayerStats.cs" />
     <Compile Include="Assets\Scripts\UI\UINormal.cs" />
@@ -71,10 +76,12 @@
     <Compile Include="Assets\Scripts\UI\UIInventory.cs" />
     <Compile Include="Assets\Scripts\Cat\EnemyStats.cs" />
     <Compile Include="Assets\Scripts\UI\RewardPanelUI.cs" />
+    <Compile Include="Assets\Scripts\Controllers\MonsterDataFetcherControl.cs" />
     <Compile Include="Assets\Scripts\Cat\StatBar.cs" />
     <Compile Include="Assets\Scripts\ControllerClass\AllPlayerCollector.cs" />
     <Compile Include="Assets\Scripts\AttackUi\BattleMenu.cs" />
     <Compile Include="Assets\Scripts\UI\InventoryInfoUI.cs" />
+    <Compile Include="Assets\Scripts\Commons\JSONHelper.cs" />
     <Compile Include="Assets\Scripts\ControllerClass\UpdatePlayer.cs" />
     <Compile Include="Assets\Scripts\UI\NormalGachaController.cs" />
     <Compile Include="Assets\Scripts\ControllerClass\PlayerMovement.cs" />
