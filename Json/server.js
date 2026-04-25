@@ -1,78 +1,81 @@
-const http = require('http')
-const { MongoClient } = require('mongodb')
-const api_gacha = require('./api/gacha')
+const http = require('http');
+const { MongoClient } = require('mongodb');
 
 // ---------------- Mongo Setup ----------------
-const uri = process.env.MONGODB_URI
-
-if (!uri) {
-    console.error("❌ MONGODB_URI not found")
-}
-
-const client = new MongoClient(uri)
-let db
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
+let db;
 
 async function connectDB() {
     if (!db) {
-        await client.connect()
-        db = client.db('game_db')
-        console.log("✅ MongoDB connected")
+        await client.connect();
+        // แก้ชื่อเป็น testdb ให้ตรงกับใน Mongo Compass ของคุณ
+        db = client.db('testdb'); 
+        console.log("✅ MongoDB connected to testdb");
     }
-    return db
+    return db;
 }
-// --------------------------------------------
 
 // ---------------------------------------------------------------
-const PORT = process.env.PORT || 9888
+const PORT = process.env.PORT || 9888;
 // ---------------------------------------------------------------
 
-async function onClientRequest(req, resp)
-{
-    const pathname = req.url.split('?')[0]
+async function onClientRequest(req, resp) {
+    const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+    const pathname = parsedUrl.pathname;
 
-    resp.writeHead(200, { 'Content-Type': 'application/json' })
+    // ตั้งค่า Header ให้ส่งเป็น JSON และรองรับภาษาไทย
+    resp.writeHead(200, { 
+        'Content-Type': 'application/json; charset=utf-8',
+        'Access-Control-Allow-Origin': '*' 
+    });
 
-    // ✅ GET weapon (ใช้ MongoDB)
-    if (req.method === 'GET' && pathname === '/api/weapon_stat') {
+    try {
+        const database = await connectDB();
 
-        const item_id = new URL(req.url, `http://mongodb+srv://<pastelskyk_db_user>:<rzNtaHidOJxpiFVm>@cluster0.r8ae8az.mongodb.net/`)
-            .searchParams.get('item_id')
-
-        try {
-            const database = await connectDB()
-
-            const weapon = await database.collection('weapons').findOne({
-                item_id: parseInt(item_id)
-            })
-
-            if (!weapon) {
-                resp.write(JSON.stringify({ message: "Weapon not found" }))
-            } else {
-                resp.write(JSON.stringify(weapon))
-            }
-
-        } catch (err) {
-            console.error(err)
-            resp.write(JSON.stringify({ error: "Database error" }))
+        // 1. API สำหรับดึงรายชื่อแมวทั้งหมด
+        if (req.method === 'GET' && pathname === '/api/characters') {
+            const cats = await database.collection('characters').find({}).toArray();
+            resp.write(JSON.stringify(cats));
         }
+
+        // 2. API สำหรับดึงค่าเงิน
+        else if (req.method === 'GET' && pathname === '/api/currency') {
+            const currency = await database.collection('currency').findOne({});
+            resp.write(JSON.stringify(currency || { message: "No currency data" }));
+        }
+
+        // 3. API สำหรับดึงข้อมูล Gacha Config
+        else if (req.method === 'GET' && pathname === '/api/gacha') {
+            const gacha = await database.collection('gacha').find({}).toArray();
+            resp.write(JSON.stringify(gacha));
+        }
+
+        // 4. API Weapon Stat เดิม (เผื่อยังใช้งาน)
+        else if (req.method === 'GET' && pathname === '/api/weapon_stat') {
+            const item_id = parsedUrl.searchParams.get('item_id');
+            const weapon = await database.collection('weapons').findOne({
+                $or: [{ item_id: Number(item_id) }, { item_id: String(item_id) }]
+            });
+            resp.write(JSON.stringify(weapon || { message: "Weapon not found" }));
+        }
+
+        // Default ถ้าไม่ตรงกับ Path ไหนเลย
+        else {
+            resp.write(JSON.stringify({ 
+                message: 'API Online', 
+                available_endpoints: ['/api/characters', '/api/currency', '/api/gacha'] 
+            }));
+        }
+    } catch (err) {
+        console.error(err);
+        resp.write(JSON.stringify({ error: "Database error", details: err.message }));
     }
 
-    // ✅ POST monster (ของเดิม)
-    else if (req.method === 'POST' && pathname === '/api/get_monsters') {
-        api_gacha.onRequestGetMonsters(req, resp)
-        return
-    }
-
-    // ✅ default
-    else {
-        resp.write(JSON.stringify({ message: 'Hello Vercel' }))
-    }
-
-    resp.end()
+    resp.end();
 }
 
-// ---------------------------------------------------------------
-const server = http.createServer(onClientRequest)
-server.listen(PORT)
-
-console.log('running on ' + PORT)
+const server = http.createServer(onClientRequest);
+server.listen(PORT, () => {
+    console.log('Server is running on port ' + PORT);
+});
