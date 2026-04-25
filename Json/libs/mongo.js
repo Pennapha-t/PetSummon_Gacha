@@ -18,7 +18,7 @@ let     options         = {
 async function runMongo()
 {
     const dbconn    = await MongoClient.connect(db_url, options);
-    const db        = dbconn.db('testDB')
+    const db        = dbconn.db('testdb')
     console.log('Connected to MongoDB')
     const collection = db.collection('testdoc')
 
