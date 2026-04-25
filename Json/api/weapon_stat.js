@@ -23,25 +23,35 @@ export default async function handler(req, res) {
   try {
     const client = await clientPromise;
     
-    // จุดที่ 1: แก้ชื่อ Database ให้ตรงกับใน MongoDB Compass (testdb)
+    // 1. ตรวจสอบชื่อ Database (จากรูป Compass คือ testdb)
     const db = client.db("testdb"); 
 
-    // จุดที่ 2: แปลงเป็น Number ให้ตรงกับ Type ใน Database (Int32)
+    // 2. ใช้ $or ค้นหาทั้งแบบ Number และ String เพื่อป้องกันความผิดพลาดของ Type
     const weapon = await db.collection("weapons").findOne({
-      item_id: Number(item_id),
+      $or: [
+        { item_id: Number(item_id) }, // ค้นหาแบบตัวเลข (Int32 ตามรูป)
+        { item_id: String(item_id) }  // เผื่อไว้กรณีเป็นข้อความ
+      ]
     });
 
     if (!weapon) {
-      // ส่งค่า item_id กลับไปดูด้วยว่าหาเลขอะไรอยู่ จะได้ Debug ง่ายขึ้นครับ
+      // เพิ่มข้อมูล Debug เพื่อดูว่า API อัปเดตหรือยัง และกำลังหาด้วยค่าอะไร
       return res.status(404).json({ 
-        message: "Weapon not found", 
-        searched_for: item_id 
+        message: "DEBUG: API Updated - Weapon not found", 
+        searched_for: item_id,
+        db_name: "testdb",
+        collection: "weapons"
       });
     }
 
+    // ถ้าเจอ ให้ส่งข้อมูลออกไป
     res.status(200).json(weapon);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "DB error", details: err.message });
+    res.status(500).json({ 
+      error: "DB error", 
+      details: err.message,
+      hint: "เช็ค MONGODB_URI ใน Vercel Settings ว่าถูกต้องหรือไม่"
+    });
   }
 }
