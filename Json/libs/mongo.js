@@ -4,12 +4,12 @@ dns.setServers(['8.8.8.8', '1.1.1.1'])
 
 const   db_protocol     = `mongodb+srv://`,
         db_path         = ``,
-        db_host         = `cluster0.eg5kxia.mongodb.net`,  
+        db_host         = `cluster0.r8ae8az.mongodb.net`,
         db_port         = ``,    
         db_url          = db_protocol+db_host+db_port+db_path
 let     authuser        = {
-                            username: `admin_db`,
-                            password: `xxxxxxxx`
+                            username: `pastelskyk_db_user`,
+                            password: `rzNtaHidOJxpiFVm`
                         }
 let     options         = {            
                                 auth: authuser ,

@@ -1,36 +1,66 @@
 const http = require('http')
+const { MongoClient } = require('mongodb')
 const api_gacha = require('./api/gacha')
+
+// ---------------- Mongo Setup ----------------
+const uri = process.env.MONGODB_URI
+
+if (!uri) {
+    console.error("❌ MONGODB_URI not found")
+}
+
+const client = new MongoClient(uri)
+let db
+
+async function connectDB() {
+    if (!db) {
+        await client.connect()
+        db = client.db('game_db')
+        console.log("✅ MongoDB connected")
+    }
+    return db
+}
+// --------------------------------------------
 
 // ---------------------------------------------------------------
 const PORT = process.env.PORT || 9888
 // ---------------------------------------------------------------
 
-function onClientRequest(req, resp)
+async function onClientRequest(req, resp)
 {
     const pathname = req.url.split('?')[0]
 
     resp.writeHead(200, { 'Content-Type': 'application/json' })
 
-    // ✅ GET weapon
+    // ✅ GET weapon (ใช้ MongoDB)
     if (req.method === 'GET' && pathname === '/api/weapon_stat') {
 
-        const item_id = new URL(req.url, `http://${req.headers.host}`)
+        const item_id = new URL(req.url, `http://mongodb+srv://<pastelskyk_db_user>:<rzNtaHidOJxpiFVm>@cluster0.r8ae8az.mongodb.net/`)
             .searchParams.get('item_id')
 
-        const data = {
-            item_id: parseInt(item_id),
-            name: "Wood Sword",
-            damage: 85,
-            sharpness: 10
-        }
+        try {
+            const database = await connectDB()
 
-        resp.write(JSON.stringify(data))
+            const weapon = await database.collection('weapons').findOne({
+                item_id: parseInt(item_id)
+            })
+
+            if (!weapon) {
+                resp.write(JSON.stringify({ message: "Weapon not found" }))
+            } else {
+                resp.write(JSON.stringify(weapon))
+            }
+
+        } catch (err) {
+            console.error(err)
+            resp.write(JSON.stringify({ error: "Database error" }))
+        }
     }
 
-    // ✅ POST monster (ของเดิมอาจารย์)
+    // ✅ POST monster (ของเดิม)
     else if (req.method === 'POST' && pathname === '/api/get_monsters') {
         api_gacha.onRequestGetMonsters(req, resp)
-        return // ❗ สำคัญ (ให้ api จัดการ resp เอง)
+        return
     }
 
     // ✅ default
@@ -38,7 +68,7 @@ function onClientRequest(req, resp)
         resp.write(JSON.stringify({ message: 'Hello Vercel' }))
     }
 
-    resp.end() // ❗ ต้องมี
+    resp.end()
 }
 
 // ---------------------------------------------------------------
